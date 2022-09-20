@@ -1,6 +1,7 @@
 package br.com.dsleite.cloudparking.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Parking {
     
@@ -15,6 +16,14 @@ public class Parking {
     
     public Parking(String id, String license, String state, String model, String color) {
         this.id = id;
+        this.license = license;
+        this.state = state;
+        this.model = model;
+        this.color = color;
+    }
+
+    public Parking(String license, String state, String model, String color) {
+        this.id = UUID.randomUUID().toString().replace("-", "");;
         this.license = license;
         this.state = state;
         this.model = model;
