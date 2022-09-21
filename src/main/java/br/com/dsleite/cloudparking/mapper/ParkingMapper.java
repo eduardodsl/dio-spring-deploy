@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.dsleite.cloudparking.dto.ParkingCreateDTO;
 import br.com.dsleite.cloudparking.dto.ParkingDTO;
+import br.com.dsleite.cloudparking.dto.ParkingPatchDTO;
 import br.com.dsleite.cloudparking.model.Parking;
 
 @Component
@@ -23,6 +24,10 @@ public class ParkingMapper {
         return MODEL_MAPPER.map(parking, ParkingCreateDTO.class);
     }
 
+    public ParkingPatchDTO toParkingPatchDTO(Parking parking){
+        return MODEL_MAPPER.map(parking, ParkingPatchDTO.class);
+    }
+
     public List<ParkingDTO> toParkingDTOList(List<Parking> parkingList){
         return parkingList.stream().map(this::toParkingDTO).collect(Collectors.toList());
     }
@@ -32,6 +37,10 @@ public class ParkingMapper {
     }
 
     public Parking toParking(ParkingCreateDTO dto){
+        return MODEL_MAPPER.map(dto, Parking.class);
+    }
+
+    public Parking toParking(ParkingPatchDTO dto){
         return MODEL_MAPPER.map(dto, Parking.class);
     }
 
