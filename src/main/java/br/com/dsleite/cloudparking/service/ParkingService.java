@@ -1,6 +1,7 @@
 package br.com.dsleite.cloudparking.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,16 +17,20 @@ import br.com.dsleite.cloudparking.model.Parking;
 public class ParkingService {
     
     private static Map<String, Parking> parkingMap = new HashMap<>();
+    private static List<Parking> parkingList = new ArrayList<>();
 
     static {
         Parking parking0 = new Parking("DMS-1111", "SC", "CELTA", "PRETO");
         Parking parking1 = new Parking("WAS-1234", "MG", "VW GOL", "PRETO");
         parkingMap.put(parking0.getId(), parking0);
         parkingMap.put(parking1.getId(), parking1);
+        parkingList.add(parking0);
+        parkingList.add(parking1);
     }
 
     public List<Parking> findAll(){
-        return parkingMap.values().stream().collect(Collectors.toList());
+        return parkingList;
+        // return parkingMap.values().stream().collect(Collectors.toList());
     }
 
     public Parking findById(String id){
