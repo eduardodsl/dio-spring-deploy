@@ -7,7 +7,7 @@ Spring framework deploy for parking management for the DIO bootcamp Spring Frame
 
 Docker image for testing:
 ```sh
-docker run --name parking-db -p 5432:5432 -e POSTGRES_DB=parking -e POSTGRES_USER=admin -e POSTGRES_PASSWORD 515duardo -d postgres:10-alpine
+docker run --name parking-db -p 5432:5432 -e POSTGRES_DB=parking -e POSTGRES_USER=[login] -e POSTGRES_PASSWORD [password] -d postgres:10-alpine
 ```
 
 Properties file used:
