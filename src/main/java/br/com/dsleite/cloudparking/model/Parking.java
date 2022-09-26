@@ -3,8 +3,13 @@ package br.com.dsleite.cloudparking.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class Parking {
     
+    @Id
     private String id;
     private String license;
     private String state;

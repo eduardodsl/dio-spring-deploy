@@ -80,20 +80,17 @@ public class ParkingController {
     public ResponseEntity<ParkingPatchDTO> patch(@PathVariable String id, @RequestBody ParkingPatchDTO dto){
         
         Parking parkingData = parkingMapper.toParking(dto);
-        Parking parking = parkingService.findById(id);
-        
         // I will later probably look for a solution using reflection and/or maps
         // todo: https://www.baeldung.com/java-method-reflection
-        if(parkingData.getColor() != null) parking.setColor(parkingData.getColor());
-        if(parkingData.getBill() != null) parking.setBill(parkingData.getBill());
-        if(parkingData.getLicense() != null) parking.setLicense(parkingData.getLicense());
-        if(parkingData.getModel() != null) parking.setModel(parkingData.getModel());
-        if(parkingData.getState() != null) parking.setState(parkingData.getState());
-        if(parkingData.getEntryDate() != null) parking.setEntryDate(parkingData.getEntryDate());
-        if(parkingData.getExitDate() != null) parking.setExitDate(parkingData.getExitDate());
-
+        Parking parking = parkingService.update(id, parkingData);
         ParkingPatchDTO result = parkingMapper.toParkingPatchDTO(parking);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
+    @PostMapping("/{id}/checkout")
+    public ResponseEntity<ParkingDTO> checkOut(@PathVariable String id){
+        Parking parking = parkingService.checkOut(id);
+        return ResponseEntity.ok(parkingMapper.toParkingDTO(parking));
     }
 
 }

@@ -1,57 +1,63 @@
 package br.com.dsleite.cloudparking.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.dsleite.cloudparking.exception.ParkingNotFoundException;
 import br.com.dsleite.cloudparking.model.Parking;
+import br.com.dsleite.cloudparking.repository.ParkingRepository;
 
 @Service
 public class ParkingService {
     
-    private static Map<String, Parking> parkingMap = new HashMap<>();
-    private static List<Parking> parkingList = new ArrayList<>();
+    private final ParkingRepository parkingRepository;
 
-    static {
-        Parking parking0 = new Parking("DMS-1111", "SC", "CELTA", "PRETO");
-        Parking parking1 = new Parking("WAS-1234", "MG", "VW GOL", "PRETO");
-        parkingMap.put(parking0.getId(), parking0);
-        parkingMap.put(parking1.getId(), parking1);
-        parkingList.add(parking0);
-        parkingList.add(parking1);
+    public ParkingService(ParkingRepository parkingRepository){
+        this.parkingRepository = parkingRepository;
     }
 
+    @org.springframework.transaction.annotation.Transactional
     public List<Parking> findAll(){
-        return parkingList;
-        // return parkingMap.values().stream().collect(Collectors.toList());
+        return parkingRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Parking findById(String id){
-        Parking parking = parkingMap.get(id);
-        if(parking == null)
+        Optional<Parking> parking = this.parkingRepository.findById(id);
+        if(!parking.isPresent())
             throw new ParkingNotFoundException(id);
-        return parkingMap.get(id);
+        return parking.get();
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public Parking create(Parking parking){
-        String id = getUUID();
         parking.setId(getUUID());
         parking.setEntryDate(LocalDateTime.now());
-        parkingMap.put(id, parking);
+        parkingRepository.save(parking);
         return parking;
     }
 
+    @Transactional
     public Parking update(String id, Parking data){
-        Parking parking = findById(id);
-        parking.setColor(data.getColor());
-        parkingMap.replace(id, parking);
+        
+        Parking parking = this.findById(id);
+        
+        if(data.getColor() != null) parking.setColor(data.getColor());
+        if(data.getBill() != null) parking.setBill(data.getBill());
+        if(data.getLicense() != null) parking.setLicense(data.getLicense());
+        if(data.getModel() != null) parking.setModel(data.getModel());
+        if(data.getState() != null) parking.setState(data.getState());
+        if(data.getEntryDate() != null) parking.setEntryDate(data.getEntryDate());
+        if(data.getExitDate() != null) parking.setExitDate(data.getExitDate());
+        
+        this.parkingRepository.save(parking);
+
         return parking;
     }
 
@@ -59,16 +65,19 @@ public class ParkingService {
         return UUID.randomUUID().toString().replace("-", "");
     }
 
+    @Transactional
     public void delete(String id) {
-        findById(id);
-        parkingMap.remove(id);
+        this.findById(id);
+        this.parkingRepository.deleteById(id);
     }
 
-    public Parking exit(String id){
-        // get parking
-        // update leave date
-        // calculate the value
-        return null;
+    @Transactional
+    public Parking checkOut(String id){
+        Parking parking = this.findById(id);
+        parking.setExitDate(LocalDateTime.now());
+        parking.setBill(ParkingCheckOut.getBill(parking));
+        this.parkingRepository.save(parking);
+        return parking;
     }
 
 }
