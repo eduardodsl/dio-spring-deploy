@@ -25,6 +25,8 @@ class CloudParkingApplicationTests extends AbstractContainerBase {
 	@Test
 	void whenFindAllThenCheckResult() {
 		RestAssured.given()
+			.auth()
+			.basic("user", "testpswd@-123*")
 			.when()
 			.get("/parking")
 			.then()
@@ -42,6 +44,8 @@ class CloudParkingApplicationTests extends AbstractContainerBase {
 		createDTO.setModel("MG");
 		
 		RestAssured.given()
+			.auth()
+			.basic("user", "testpswd@-123*")
 			.when()
 			.contentType(MediaType.APPLICATION_JSON_VALUE)
 			.body(createDTO)
