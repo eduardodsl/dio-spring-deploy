@@ -52,6 +52,18 @@
 			<artifactId>rest-assured</artifactId>
 			<scope>test</scope>
 			<version>5.2.0</version>
+			
+			<exclusions><!-- https://www.baeldung.com/maven-version-collision -->
+				<exclusion>
+					<groupId>org.apache.groovy</groupId>
+					<artifactId>groovy</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.groovy</groupId>
+					<artifactId>groovy-xml</artifactId>
+				</exclusion>
+			</exclusions>
+
 		 </dependency>
 
 		 <dependency>
@@ -72,6 +84,21 @@
 			<scope>test</scope>
 		  </dependency>
 
+		  <dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-resources-plugin</artifactId>
+			<version>3.3.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<version>3.0.0-M7</version>
+			<scope>test</scope>
+		</dependency>
+		
+		
 	</dependencies>
 
 	<build>

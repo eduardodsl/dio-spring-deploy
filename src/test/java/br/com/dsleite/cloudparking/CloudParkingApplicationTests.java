@@ -12,7 +12,7 @@ import br.com.dsleite.cloudparking.dto.ParkingCreateDTO;
 import io.restassured.RestAssured;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CloudParkingApplicationTests {
+class CloudParkingApplicationTests extends AbstractContainerBase {
 
 	@LocalServerPort
 	private int randomPort;
@@ -28,8 +28,7 @@ class CloudParkingApplicationTests {
 			.when()
 			.get("/parking")
 			.then()
-			.statusCode(HttpStatus.OK.value())
-			.body("license[0]", Matchers.equalTo("DMS-1111"));
+			.statusCode(HttpStatus.OK.value());
 	}
 
 	@Test
